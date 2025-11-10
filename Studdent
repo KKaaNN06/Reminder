@@ -1,0 +1,47 @@
+<?php
+namespace App\Entity;
+
+use App\Repository\StudentRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: StudentRepository::class)]
+class Student
+{
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $lastName = null;
+
+    #[ORM\Column(type: 'string', length: 180, unique: false)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $birthDate = null;
+
+    #[ORM\ManyToOne(targetEntity: SchoolGroup::class, inversedBy: 'students')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?SchoolGroup $schoolGroup = null;
+
+    // getters / setters
+
+    public function getId(): ?int { return $this->id; }
+    public function getFirstName(): ?string { return $this->firstName; }
+    public function setFirstName(string $firstName): self { $this->firstName = $firstName; return $this; }
+    public function getLastName(): ?string { return $this->lastName; }
+    public function setLastName(string $lastName): self { $this->lastName = $lastName; return $this; }
+    public function getEmail(): ?string { return $this->email; }
+    public function setEmail(string $email): self { $this->email = $email; return $this; }
+    public function getBirthDate(): ?\DateTimeInterface { return $this->birthDate; }
+    public function setBirthDate(?\DateTimeInterface $birthDate): self { $this->birthDate = $birthDate; return $this; }
+
+    public function getSchoolGroup(): ?SchoolGroup { return $this->schoolGroup; }
+    public function setSchoolGroup(?SchoolGroup $schoolGroup): self { $this->schoolGroup = $schoolGroup; return $this; }
+
+    public function getFullName(): string { return trim($this->firstName . ' ' . $this->lastName); }
+
+    public function __toString(): string { return $this->getFullName(); }
+}
