@@ -1,0 +1,30 @@
+<?php
+namespace App\Controller;
+
+use App\Repository\SchoolGroupRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/groups')]
+class SchoolGroupController extends AbstractController
+{
+    #[Route('/', name: 'group_index', methods: ['GET'])]
+    public function index(SchoolGroupRepository $repo): Response
+    {
+        $groups = $repo->findAll();
+        return $this->render('group/index.html.twig', compact('groups'));
+    }
+
+    // Wanneer op een klas geklikt wordt: toon details en de studenten
+    #[Route('/{id}', name: 'group_show', methods: ['GET'])]
+    public function show($id, SchoolGroupRepository $repo): Response
+    {
+        $group = $repo->find($id);
+        if (!$group) {
+            throw $this->createNotFoundException('Klas niet gevonden.');
+        }
+        $students = $group->getStudents();
+        return $this->render('group/show.html.twig', compact('group','students'));
+    }
+}
