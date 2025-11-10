@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block title %}Studenten{% endblock %}
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Studenten</h1>
+    <a class="btn btn-success" href="{{ path('student_new') }}">Nieuwe student</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-primary">
+        <tr>
+            <th>#</th>
+            <th>Naam</th>
+            <th>E-mail</th>
+            <th>Klas</th>
+            <th>Acties</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for student in students %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td><a href="{{ path('student_show', {'id': student.id}) }}">{{ student.fullName }}</a></td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.schoolGroup ? student.schoolGroup.name : '-' }}</td>
+            <td>
+                <a class="btn btn-sm btn-primary" href="{{ path('student_edit', {'id': student.id}) }}">Bewerk</a>
+
+                <form method="post" action="{{ path('student_delete', {'id': student.id}) }}" style="display:inline-block" onsubmit="return confirm('Weet je het zeker?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+                    <button class="btn btn-sm btn-danger">Verwijder</button>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="5">Nog geen studenten</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
