@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nieuwe student{% endblock %}
+{% block body %}
+<h1>Nieuwe student</h1>
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.firstName) }}</div>
+        <div class="col-md-6">{{ form_row(form.lastName) }}</div>
+        <div class="col-md-6">{{ form_row(form.email) }}</div>
+        <div class="col-md-6">{{ form_row(form.birthDate) }}</div>
+        <div class="col-md-12">{{ form_row(form.schoolGroup) }}</div>
+    </div>
+    <button class="btn btn-success mt-3">Opslaan</button>
+    <a class="btn btn-secondary mt-3" href="{{ path('student_index') }}">Annuleren</a>
+{{ form_end(form) }}
+{% endblock %}
